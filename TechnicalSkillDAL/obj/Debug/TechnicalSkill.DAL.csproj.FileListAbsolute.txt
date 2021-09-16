@@ -1,0 +1,11 @@
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkill.DAL.csproj.CoreCompileInputs.cache
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\TechnicalSkill.DAL.dll.config
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\TechnicalSkill.DAL.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\TechnicalSkill.DAL.pdb
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\EntityFramework.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\EntityFramework.xml
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkill.DAL.csproj.CopyComplete
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkill.DAL.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkill.DAL.pdb

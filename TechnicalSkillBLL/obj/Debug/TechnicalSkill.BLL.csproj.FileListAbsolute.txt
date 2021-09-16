@@ -1,0 +1,5 @@
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillBLL\bin\Debug\TechnicalSkill.BLL.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillBLL\bin\Debug\TechnicalSkill.BLL.pdb
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillBLL\obj\Debug\TechnicalSkill.BLL.csproj.CoreCompileInputs.cache
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillBLL\obj\Debug\TechnicalSkill.BLL.dll
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillBLL\obj\Debug\TechnicalSkill.BLL.pdb

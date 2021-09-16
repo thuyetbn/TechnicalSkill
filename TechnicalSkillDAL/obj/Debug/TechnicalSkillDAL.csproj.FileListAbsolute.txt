@@ -1,0 +1,2 @@
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkillDAL.csproj.AssemblyReference.cache
+C:\Users\BinDz\source\repos\TechnicalSkill\TechnicalSkillDAL\obj\Debug\TechnicalSkillDAL.csproj.CoreCompileInputs.cache
