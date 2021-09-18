@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using TechnicalSkill.BLL;
@@ -18,7 +19,35 @@ namespace TechnicalSkill.Areas.Admin.Controllers
         // GET: Admin/Post
         public ActionResult Index()
         {
-            return View(posts.Get().OrderByDescending(x => x.Created_At));
+            return View();
+        }
+        public ActionResult GetData()
+        {
+            var data = posts.Get().Select(x => new CategoryPostViewModels(x));
+            return Json(new
+            {
+                data = data.ToList(),
+                message = "Success",
+                statusCode = 200
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (posts.Delete(id))
+            {
+                return Json(new
+                {
+                    statusCode = 200,
+                    message = "Success"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                statusCode = 400,
+                message = "Error"
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
