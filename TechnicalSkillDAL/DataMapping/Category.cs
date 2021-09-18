@@ -14,6 +14,6 @@ namespace TechnicalSkill.DAL
         public string Name { get; set; }
         public string Description { get; set; }
         public string LinkRSS { get; set; }
-        public string slug { get; set; }
+
     }
 }

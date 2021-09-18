@@ -1,0 +1,35 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<TechnicalSkill.DAL.Post>
+@{
+
+}
+
+<div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">@ViewBag.Title</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        @foreach (var item in Model)
+        {
+
+            <div class="col d-flex align-items-start">
+                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+                    <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+                </div>
+                <div>
+                    <h2>@item.Title</h2>
+                    <span class="date" style="font-size: 14px; color: #757575; ">@DateTime.Parse(item.Created_At)</span>
+                    <p>@item.Description</p>
+                    <a href="@Url.Action("DetailPost","Home",new { id = item.Id})" class="btn btn-primary">
+                        See more
+                    </a>
+                </div>
+            </div>
+
+        }
+    </div>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })
+
+    )
+</div>

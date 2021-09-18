@@ -1,32 +1,43 @@
-﻿<!DOCTYPE html>
+﻿@using TechnicalSkill.DAL
+@using TechnicalSkill.DAL.Utils
+@{ var user = (User)Session["user"]; }
+@{ var cat = (List<Category>)Session["category"]; }
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <header class="p-3 bg-dark text-white">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" id="menu">
                 </ul>
+                <div class="text-end">
+                    @if (Utils.IsNullOrEmpty(user))
+                    {
+                        <a href="@Url.Action("Login","Home")" class="btn btn-outline-light me-2">Login</a>
+                        <a href="@Url.Action("Register","Home")" class="btn btn-warning">Sign-up</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-light me-2">@user.Name</a>
+                        if (user.Rold == "Admin")
+                        {
+                            <a href="@Url.Action("Index","Home",new {Area = "Admin"})" class="btn btn-warning">Quản trị web</a>
+                        }
+
+                    }
+
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -36,7 +47,31 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
     @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+           $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetCategory", "Category")",
+                    success: function (res) {
+                        if (res.statusCode === 200) {
+                            console.log(res.data)
+                            let _html = `<li><a href="/Home/Index" class="nav-link px-2 text-white">Trang chủ</a ></li >`;
+                            for (let item of res.data) {
+                                console.log(item)
+                                _html += `
+                                            <li><a href="/Category/Index/${item.Id}" class="nav-link px-2 text-white">${item.Name}</a></li>
+                                         `
+                            }
+                            $('#menu').html(_html);
+                        }
+
+                    }
+                })
+        })
+    </script>
 </body>
 </html>
