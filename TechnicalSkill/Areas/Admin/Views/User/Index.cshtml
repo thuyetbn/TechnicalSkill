@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0)">Home</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a href="javascript:void(0)">User Management</a>
+        </li>
+    </ol>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">User Management</h3>
+                <button class="btn btn-sm btn-primary btn-add">Create New User</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table-responsive-lg min-w850 dataTable no-footer" id="datatables" role="grid" aria-describedby="example4_info">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>UserName</th>
+                                <th>Rold</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl_user"></tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade " id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="formData" method="POST" novalidate="novalidate">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Infomation Account</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="Id" value="" />
+                    <input type="hidden" name="type" id="type" value="CREATE" />
+
+                    <div class="form-group">
+                        <label>Name <span class="text-danger">*</span></label>
+                        <div class="error">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Name...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>UserName <span class="text-danger">*</span></label>
+                        <div class="error">
+                            <input type="text" class="form-control" id="UserName" name="UserName" placeholder="UserName...">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section AdminlteJs{
+    <script src="~/Content/vendor/datatables/js/jquery.dataTables.min.js"></script>
+}
+@section scripts{
+    <script>
+        const validator = $("#formData").validate({
+            rules: {
+                "Name": {
+                    required: true
+                },
+                "UserName": {
+                    required: true
+                },
+            },
+            ignore: [],
+            errorClass: "invalid-feedback animated fadeInUp",
+            errorElement: "div",
+            errorPlacement: function (e, a) {
+                jQuery(a).after(e)
+            },
+            highlight: function (e) {
+                jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-invalid")
+            },
+            success: function (e) {
+                jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-valid")
+            },
+
+            submitHandler: function () {
+                const user = {
+                    Name: $("#Name").val(),
+                    UserName: $("#UserName").val()
+                };
+                if ($("#type").val() === "EDIT") {
+                    user.Id = $("#Id").val();
+                    console.log(user)
+                    managerUser.put(user);
+                } else {
+                    managerUser.post(user);
+                }
+            }
+        });
+        const managerUser = {
+            get: function (id) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("FindId", "User")",
+                    data: { id: id },
+                    success: function (res) {
+                        console.log(res);
+                        $("#Id").val(res.Id);
+                        $("#Name").val(res.Name);
+                        $("#UserName").val(res.UserName);
+                        $("#myModal").modal("show");
+                    }
+                })
+            },
+            put: function (user) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Edit", "User")",
+                    data: user,
+                    success: function (res) {
+                        if (res.statusCode === 200) {
+                            notifySuccess('Updated Successfully',"Updated Successfully");
+                            $("#myModal").modal("hide");
+                            $('#datatables').DataTable().ajax.reload();
+                        } else {
+                            if (typeof res.data == "string") {
+                                $("#myModal").modal("hide");
+                                notifyError('Updated Error', res.data);
+                            } else {
+                                validator.showErrors(res.data);
+                            }
+
+                        }
+                    }
+
+                })
+            },
+            post: function (user) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Create", "User")",
+                    data: user,
+                    success: function (res) {
+                        if (res.statusCode === 200) {
+                            notifySuccess('Created Successfully',"Created Successfully");
+                            $("#myModal").modal("hide");
+                            $('#datatables').DataTable().ajax.reload();
+                        }
+                        else {
+                            if (typeof res.data == "string") {
+                                notifyError("Error", res.data);
+                                $("#modifyModal").modal("hide");
+                            } else {
+                                validator.showErrors(res.data);
+                            }
+
+                        }
+                    }
+
+                })
+            },
+            delete: function (id) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Delete", "User")",
+                    data: {id : id},
+                    success: function (res) {
+                        if (res.statusCode === 200) {
+                            notifySuccess('Successfully',"Deleted Successfully");
+                            $('#datatables').DataTable().ajax.reload();
+                        }else {
+                            notifyError('Error',"Deleted Error");
+                            $('#datatables').DataTable().ajax.reload();
+                        }
+
+                    }
+                })
+            }
+        }
+    $(function () {
+         $('#datatables').DataTable({
+                "paging": true,
+                "ordering": true,
+                "autoWidth": false,
+                "responsive": true,
+                "processing": true,
+                "filter": true,
+                "lengthMenu": [5, 10, 20, 50, 100, 200, 500],
+                "ajax": "@Url.Action("GetData", "User")",
+                "order": [
+                    [0, 'asc']
+                ],
+                "columns": [
+                    {
+                        data: 'Id',
+                        className: 'align-middle text-center'
+                    },
+                    {
+                        data: 'Name',
+                        className: 'align-middle',
+                    },
+                    {
+                        data: 'UserName',
+                        className: 'align-middle',
+                    },
+                    {
+                        data: 'Rold',
+                        className: 'align-middle',
+                    },
+                    {
+                        data: { Id: 'Id'},
+                        render: function (data) {
+                            return '<div class="dropdown custom-dropdown mb-0"><div class="btn sharp btn-primary tp-btn" data-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg></div><div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(40px, 41px, 0px);">' +
+                                '<a  data-id=" ' + data.Id + ' " class="dropdown-item btn-edit text-warning" href="javascript:void(0);">Edit</a>' +
+                                '<a  data-id=" ' + data.Id + '" class="dropdown-item text-danger btn-delete" href="javascript:void(0);">Delete</a></div></div>'
+                             }
+                    },
+                ]
+         })
+        $(document).on("click", ".btn-edit", function () {
+            $("#type").val("EDIT");
+            let userId = $(this).data("id");
+            let a = managerUser.get(userId);
+        })
+        $(document).on("click", ".btn-add", function () {
+            validator.resetForm();
+            $(".modal-title").html("Create User");
+            $("#formData").trigger("reset");
+            $("#type").val("CREATE");
+            $("#myModal").modal("show");
+        })
+        $(document).on("click", ".btn-delete", function () {
+            let userId = $(this).data("id");
+            managerUser.delete(userId);
+        });
+        $('#modifyModal').on('shown.bs.modal', function () {
+            validator.resetForm();
+        });
+    })
+    </script>
+}

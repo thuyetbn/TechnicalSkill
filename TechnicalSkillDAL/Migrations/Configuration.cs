@@ -10,7 +10,9 @@ namespace TechnicalSkill.DAL.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
+            ContextKey = "Technical.DAL.DatabaseContext";
         }
     } 
 }

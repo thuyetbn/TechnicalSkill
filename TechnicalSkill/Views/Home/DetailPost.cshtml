@@ -1,0 +1,36 @@
+﻿@model TechnicalSkill.DAL.Post
+@{
+    ViewBag.Title = "DetailPost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">@Model.Title</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">@Model.Content</p>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        $(function () {
+            sleep(3000).then(() => {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Views", "Home")",
+                    data: {Id :@Model.Id},
+                    success: function (res) {
+                        console.log(res)
+                    }
+                })
+            })
+
+        })
+    </script>
+
+} 
