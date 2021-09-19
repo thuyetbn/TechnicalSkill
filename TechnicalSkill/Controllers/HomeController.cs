@@ -21,6 +21,7 @@ namespace TechnicalSkill.Controllers
 {
     public class HomeController : Controller
     {
+        //Khai báo phương thức thao tác giao tiếp với lớp data
         private readonly IRepository<User> users;
         private readonly IRepository<Post> posts;
         private readonly IRepository<Category> categories;
@@ -30,22 +31,24 @@ namespace TechnicalSkill.Controllers
             posts = new Repository<Post>();
             categories = new Repository<Category>();
         }
+
+        //Trang chủ
         public ActionResult Index(int? page)
         {
             var pageNumber = page ?? 1;
             var pageSize = 6;
 
             var data = posts.Get().OrderByDescending(x => x.Created_At).ToPagedList(pageNumber, pageSize);
-            
-
             return View(data);
         }
 
+        //Xem chi tiết bài viết
         public ActionResult DetailPost(int Id)
         {
             return View(posts.Get(Id));
         }
         
+        //Thêm lượt viet cho bài viết
         public ActionResult Views(int Id)
         {
             var postView = posts.Get(Id);
@@ -64,6 +67,7 @@ namespace TechnicalSkill.Controllers
             return View();
         }
         
+        //Xử lý Login
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
@@ -100,17 +104,5 @@ namespace TechnicalSkill.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-            return View();
-        }
     }
 }

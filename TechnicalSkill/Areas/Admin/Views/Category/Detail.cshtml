@@ -67,7 +67,8 @@
                 })
             }
         }
-    $(function () {
+        $(function () {
+        //Load các bài viết vào datatable
         $('#datatables').DataTable({
             "paging": true,
             "ordering": true,
@@ -119,7 +120,7 @@
                     },
                 ]
          })
-
+        //Xoá bài viết
         $(document).on("click", ".btn-delete", function () {
             let catId = $(this).data("id");
             managerPost.delete(catId);

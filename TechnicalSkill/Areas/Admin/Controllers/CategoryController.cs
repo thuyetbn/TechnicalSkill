@@ -8,15 +8,18 @@ using System.Web;
 using System.Web.Mvc;
 using TechnicalSkill.Areas.Admin.Data;
 using TechnicalSkill.BLL;
+using TechnicalSkill.Controllers;
 using TechnicalSkill.DAL;
 using TechnicalSkill.DAL.Utils;
 
 namespace TechnicalSkill.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
+        //Khai báo phương thức thao tác giao tiếp với lớp data
         private readonly IRepository<Category> categories;
         private readonly IRepository<Post> posts;
+        //Khởi tạo
         public CategoryController()
         {
             categories = new Repository<Category>();
@@ -27,6 +30,7 @@ namespace TechnicalSkill.Areas.Admin.Controllers
         {
             return View();
         }
+        //Export báo cáo số lượt xem của bài viết theo Category
         public ActionResult ExportReport(int Id)
         {
             ReportDocument rd = new ReportDocument();
@@ -37,23 +41,27 @@ namespace TechnicalSkill.Areas.Admin.Controllers
             Response.ClearHeaders();
             try
             {
+                //Xử lý export file pdf
                 Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
                 stream.Seek(0, SeekOrigin.Begin);
                 return File(stream, "application/pdf", "Report_PostViews.pdf");
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
+        //Lấy thêm bài viết theo category
         public ActionResult GetMorePost(int Id)
         {
             var dataCat = categories.Get(Id);
+            //Convert rss to list object post
             var job = new Job();
             var listposts = job.ConvertRss(dataCat);
+
+            // Add list object post to Database
             posts.AddRange(listposts);
-            var count = listposts.Count;
             return Json(new
             {
                 data = listposts.Count(),
@@ -61,6 +69,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 statusCode = 200
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Lấy chi tiết các bài viết theo category 
         public ActionResult Detail(int Id)
         {
             var x = categories.Get(Id);
@@ -71,6 +81,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
 
             return View(x);
         }
+
+        // Lấy tất cả category
         public ActionResult GetData()
         {
             var data = categories.Get();
@@ -81,6 +93,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 statusCode = 200
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Lấy ra bài viết theo category
         public ActionResult GetPost(int Id)
         {
             var data = posts.Get(x=>x.CategoryId == Id).Select(x => new CategoryPostViewModels(x));
@@ -91,11 +105,15 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 statusCode = 200
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Tìm category theo Id
         public ActionResult FindId(int id)
         {
             var data = categories.Get(id);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        //Sửa category item
         [HttpPost]
         public ActionResult Edit(Category category)
         {
@@ -109,7 +127,7 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                     message = "Error",
                     data = category
                 }, JsonRequestBehavior.AllowGet);
-
+            
             if (categories.CheckDuplicate(x => x.Name == category.Name && x.Id != cat.Id))
             {
                 check = false;
@@ -167,6 +185,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 data = errors
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Thêm category item
         [HttpPost]
         public ActionResult Create(Category category)
         {
@@ -229,6 +249,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 data = errors
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Xoá category item theo Id
         public ActionResult Delete(int id)
         {
             if (categories.Delete(id))

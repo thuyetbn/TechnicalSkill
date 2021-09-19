@@ -17,7 +17,7 @@ namespace TechnicalSkill
             {
                 await scheduler.Start();
             }
-            // define the job and tie it to our Job class
+            
             IJobDetail job = JobBuilder.Create<Job>().WithIdentity("ExecuteTaskServiceCallJob1", "group1").Build();
 
             ITrigger trigger = TriggerBuilder.Create().WithIdentity("ExecuteTaskServiceCallTrigger1", "group1").StartNow().WithSimpleSchedule(x => x.WithIntervalInSeconds(10).RepeatForever()).Build();

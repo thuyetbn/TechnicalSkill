@@ -11,6 +11,7 @@ namespace TechnicalSkill.Controllers
 {
     public class CategoryController : Controller
     {
+        //Khai báo phương thức thao tác giao tiếp với lớp data
         private readonly IRepository<Category> categorries;
         private readonly IRepository<Post> posts;
         public CategoryController()
@@ -18,7 +19,8 @@ namespace TechnicalSkill.Controllers
             categorries = new Repository<Category>();
             posts = new Repository<Post>();
         }
-        // GET: Category
+        
+        //Trang chủ của các menu item
         public ActionResult Index(int Id, int? page)
         {
             var pageNumber = page ?? 1;
@@ -29,6 +31,7 @@ namespace TechnicalSkill.Controllers
             return View(data);
         }
     
+        //Lấy ra category
         public ActionResult GetCategory()
         {
             var data = categorries.Get();

@@ -79,6 +79,7 @@
 }
 @section scripts{
     <script>
+        //Validate form user item
         const validator = $("#formData").validate({
             rules: {
                 "Name": {
@@ -115,6 +116,7 @@
                 }
             }
         });
+        //Các hàm ajax
         const managerUser = {
             get: function (id) {
                 $.ajax({
@@ -195,8 +197,9 @@
                 })
             }
         }
-    $(function () {
-         $('#datatables').DataTable({
+        $(function () {
+        //Load dữ liệu user to datatable
+        $('#datatables').DataTable({
                 "paging": true,
                 "ordering": true,
                 "autoWidth": false,
@@ -234,12 +237,14 @@
                              }
                     },
                 ]
-         })
+        })
+        //Sửa user
         $(document).on("click", ".btn-edit", function () {
             $("#type").val("EDIT");
             let userId = $(this).data("id");
             let a = managerUser.get(userId);
         })
+        //Thêm user
         $(document).on("click", ".btn-add", function () {
             validator.resetForm();
             $(".modal-title").html("Create User");
@@ -247,10 +252,12 @@
             $("#type").val("CREATE");
             $("#myModal").modal("show");
         })
+        //Xoá user
         $(document).on("click", ".btn-delete", function () {
             let userId = $(this).data("id");
             managerUser.delete(userId);
         });
+
         $('#modifyModal').on('shown.bs.modal', function () {
             validator.resetForm();
         });

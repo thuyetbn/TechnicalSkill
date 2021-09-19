@@ -5,15 +5,18 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using TechnicalSkill.BLL;
+using TechnicalSkill.Controllers;
 using TechnicalSkill.DAL;
 using TechnicalSkill.DAL.Utils;
 
 namespace TechnicalSkill.Areas.Admin.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
+        //Khai báo phương thức thao tác giao tiếp với lớp data
         private readonly IRepository<User> users;
-        // GET: Admin/User
+
+        //Khởi tạo
         public UserController()
         {
             users = new Repository<User>();
@@ -22,6 +25,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
         {
             return View();
         }
+
+        //Lấy tất cả User
         public ActionResult GetData()
         {
             var data = users.Get();
@@ -32,11 +37,15 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 statusCode = 200
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Tìm user theo Id
         public ActionResult FindId(int id)
         {
             var data = users.Get(id);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        //Sửa user item
         [HttpPost]
         public ActionResult Edit(User user)
         {
@@ -102,6 +111,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 data = errors
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Thêm user item
         [HttpPost]
         public ActionResult Create(User user)
         {
@@ -160,6 +171,8 @@ namespace TechnicalSkill.Areas.Admin.Controllers
                 data = errors
             }, JsonRequestBehavior.AllowGet);
         }
+
+        //Xoá user item
         public ActionResult Delete(int id)
         {
             if (users.Delete(id))

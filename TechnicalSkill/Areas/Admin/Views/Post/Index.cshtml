@@ -47,6 +47,7 @@
 }
 @section scripts{
     <script>
+         //Các hàm ajax
         const managerPost = {
             delete: function (id) {
                 $.ajax({
@@ -66,7 +67,8 @@
                 })
             }
         }
-    $(function () {
+        $(function () {
+        //Load dữ liệu các bài viết to datatable
         $('#datatables').DataTable({
             "paging": true,
             "ordering": true,
@@ -115,7 +117,7 @@
                     },
                 ]
          })
-
+        //xoá bài viết
         $(document).on("click", ".btn-delete", function () {
             let catId = $(this).data("id");
             managerPost.delete(catId);

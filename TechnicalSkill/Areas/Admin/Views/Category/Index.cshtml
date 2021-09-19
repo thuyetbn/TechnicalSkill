@@ -84,6 +84,7 @@
 }
 @section scripts{
     <script>
+        //Validate form category item
         const validator = $("#formData").validate({
             rules: {
                 "Name": {
@@ -124,6 +125,8 @@
                 }
             }
         });
+
+        //Các hàm ajax
         const managerCategory = {
             get: function (id) {
                 $.ajax({
@@ -227,8 +230,9 @@
                 })
             }
         }
-    $(function () {
-         $('#datatables').DataTable({
+        $(function () {
+        //Load dữ liệu category to datatable
+        $('#datatables').DataTable({
                 "paging": true,
                 "ordering": true,
                 "autoWidth": false,
@@ -271,20 +275,24 @@
                              }
                     },
                 ]
-         })
+        })
+        //Xuất báo cáo
         $(document).on("click", ".btn-report", function () {
             let catId = $(this).data("id");
             managerCategory.export(catId);
         })
+        //Sửa category
         $(document).on("click", ".btn-edit", function () {
             $("#type").val("EDIT");
             let catId = $(this).data("id");
             let a = managerCategory.get(catId);
         })
+        //Xem các bài viết của category 
         $(document).on("click", ".btn-get", function () {
             let catId = $(this).data("id");
             managerCategory.getMorePost(catId);
         })
+        //Thêm category item
         $(document).on("click", ".btn-add", function () {
             validator.resetForm();
             $(".modal-title").html("Create Category");
@@ -292,6 +300,7 @@
             $("#type").val("CREATE");
             $("#myModal").modal("show");
         })
+        //xoá category item
         $(document).on("click", ".btn-delete", function () {
             let catId = $(this).data("id");
             managerCategory.delete(catId);
